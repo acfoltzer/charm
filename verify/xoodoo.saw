@@ -15,8 +15,9 @@ let ptr_to_fresh n ty = do {
     return (x, p);
 };
 
-charm_bc <- llvm_load_module "charm.bc";
-charm_opt_bc <- llvm_load_module "charm-opt.bc";
+// charm_bc <- llvm_load_module "charm.bc";
+// charm_opt_bc <- llvm_load_module "charm-opt.bc";
+charm_O2_bc <- llvm_load_module "charm-O2.bc";
 
 let permute_spec = do {
   // Preconditions: amounts to having a symbolic array somewhere in memory, and a pointer to it
@@ -35,12 +36,16 @@ let prove_permute mod solver = do {
   crucible_llvm_verify mod "permute" [] false permute_spec solver;
 };
 
-print "Proving unoptimized permute equivalent to spec using ABC";
-result <- with_time (prove_permute charm_bc abc);
-print (str_concat "Proof finished in " (str_concat (show result.0) "ms"));
+// print "Proving unoptimized permute equivalent to spec using ABC";
+// result <- with_time (prove_permute charm_bc abc);
+// print (str_concat "Proof finished in " (str_concat (show result.0) "ms"));
 
-print "Proving -O1 optimized permute equivalent to spec using ABC";
-result <- with_time (prove_permute charm_opt_bc abc);
+// print "Proving -O1 optimized permute equivalent to spec using ABC";
+// result <- with_time (prove_permute charm_opt_bc abc);
+// print (str_concat "Proof finished in " (str_concat (show result.0) "ms"));
+
+print "Proving -O2 optimized permute equivalent to spec using ABC";
+result <- with_time (prove_permute charm_O2_bc abc);
 print (str_concat "Proof finished in " (str_concat (show result.0) "ms"));
 
 print "Verification succeeded!";

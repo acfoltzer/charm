@@ -62,23 +62,26 @@ trap cleanup EXIT
 
 # Cryptol spec proof or random test, depending on whether Yices is installed
 
-if [ -x "$(command -v yices)" ]; then
-    echo "yices found in PATH; proving properties defined in the Cryptol spec"
-    ${CRYPTOL} xoodoo.cry -c ":set prover=yices" -c ":prove"
-else
-    echo "yices not found in PATH; running randomized property tests on the Cryptol spec"
-    echo "(to prove properties instead, install yices from https://yices.csl.sri.com/"
-    ${CRYPTOL} xoodoo.cry -c ":set tests=1000" -c ":check"
-fi
+# if [ -x "$(command -v yices)" ]; then
+#     echo "yices found in PATH; proving properties defined in the Cryptol spec"
+#     ${CRYPTOL} xoodoo.cry -c ":set prover=yices" -c ":prove"
+# else
+#     echo "yices not found in PATH; running randomized property tests on the Cryptol spec"
+#     echo "(to prove properties instead, install yices from https://yices.csl.sri.com/"
+#     ${CRYPTOL} xoodoo.cry -c ":set tests=1000" -c ":check"
+# fi
 
 # Build LLVM bitcodes from C implementation (-O2 seems to produce bitcode with a GEP instruction SAW
 # doesn't like)
 
-echo "Building unoptimized LLVM bitcode from charm.c"
-${CLANG} -g -c ../src/charm.c -emit-llvm -o charm.bc
+# echo "Building unoptimized LLVM bitcode from charm.c"
+# ${CLANG} -g -c ../src/charm.c -emit-llvm -o charm.bc
 
-echo "Building -O1 optimized LLVM bitcode from charm.c"
-${CLANG} -g -c ../src/charm.c -emit-llvm -O1 -o charm-opt.bc
+# echo "Building -O1 optimized LLVM bitcode from charm.c"
+# ${CLANG} -g -c ../src/charm.c -emit-llvm -O1 -o charm-opt.bc
+
+echo "Building -O2 optimized LLVM bitcode from charm.c"
+${CLANG} -g -c ../src/charm.c -emit-llvm -O2 -o charm-O2.bc
 
 # And finally run the equivalence proofs
 
